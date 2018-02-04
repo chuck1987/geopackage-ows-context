@@ -1,0 +1,11 @@
+=== Table Definition SQL
+TBD
+
+=== Abstract Test Suite (Normative)
+TBD
+
+=== References
+
+[bibliography]
+- [[[1]]] http://www.geopackage.org/spec[OGC 12-128r14 OGC® GeoPackage Encoding Standard (On-line)]
+- [[[2]]] OGC 12-080r2 OWS Context Conceptual Model, 2014-01-22, https://portal.opengeospatial.org/files/?artifact_id=55182

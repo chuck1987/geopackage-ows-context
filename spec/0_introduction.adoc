@@ -1,0 +1,15 @@
+[preface]
+== Introduction
+
+A GeoPackage <<geopackage>> is a platform-independent SQLite <<sqlite>> database file that contains GeoPackage data and metadata tables.
+GeoPackage is designed to be extensible, including support for additional data types.
+
+The OGC Web Services Context Document (OWS Context <<ows_context>>) was created to allow a set of configured information resources (service set) to be passed between applications as a collection of services and inline content.
+
+This document defines a set of extensions that allows a GeoPackage to contain OWS Context documents in a relational encoding. 
+
+[bibliography]
+
+- [[[geopackage]]] http://www.geopackage.org/
+- [[[ows_context]]] http://owscontext.org/
+- [[[sqlite]]] http://www.sqlite.org/

@@ -1,0 +1,62 @@
+== OWS Context Extensions
+
+[[ows_context_sql_select_offering]]
+=== SQL Select Offering Extension
+This new type of offering allows an OWS Context to reference content within a relational database.
+
+==== Datatype owc:SQLSelectOffering
+This datatype extends owc:Offering.
+
+[[sql_select_offering_table]]
+.Datatype owc:SQLSelectOffering
+[cols=",,,",options="header",]
+|=======================================================================
+|Name |Definition | Data Type and Values |Multiplicity and Use
+|`code`|`SELECT`| CharacterString| One (mandated) 
+|`operation` |Operations used to invoke the service   | owc:Operation | Zero or More (optional)  
+|`content`  |See owc:SQLContent (<<owc_sql_content>>)  |   | One (mandatory)
+|`styleSet`   |Style sets to style the in-line content   |owc:StyleSet   | Zero or more (optional)
+|`result`|the result expression list, i.e., everything between SELECT and FROM|CharacterString | One (mandatory)
+|`from`|a single table or view name|CharacterString | One (mandatory)
+|`where`|the actual WHERE clause|CharacterString | Zero or one (optional)
+|`order_by`|the actual `ORDER BY` clause|CharacterString | Zero or one (optional)
+|`group_by`|the actual `GROUP BY` clause|CharacterString | Zero or one (optional)
+|=======================================================================
+
+[NOTE]
+====
+If joins are needed, they should be established as views beforehand so that the `from` element can be a single value.
+====
+ 
+[[owc_sql_content]]
+==== owc:Content
+For owc:SQLSelectOffering, the owc:Content datatype has the following elements:
+
+.Datatype owc:Content for owc:SQLSelectOffering
+[cols=",,,",options="header",]
+|=======================================================================
+|Name |Definition | Data Type and Values |Multiplicity and Use
+|`type`|`URL`| CharacterString| One (mandatory) 
+|`URL` |Referenced content| Character String | One (mandatory)  
+|`content`  | N/A  | N/A  | Prohibited
+|=======================================================================
+
+[NOTE]
+====
+If the referenced content is within a database, the `URL` should be `.`. Otherwise the `URL` should be a connect string.
+====
+
+[[ows_context_sql_resource]]
+=== SQL Resource Extension
+Since relational databases have no mechanical way to control ordering, this extension provides an new datatype that contains an element that can be implemented as a column to support ordering.
+
+==== Datatype owc:SQLSelectResource
+This datatype extends owc:Resource with the elements listed in <<sql_select_resource_extension_table>>.
+[[sql_select_resource_extension_table]]
+.Datatype owc:SQLSelectResource
+[cols=",,,",options="header",]
+|=======================================================================
+|Name |Definition | Data Type and Values |Multiplicity and Use
+|`order`|The order of| INTEGER| Zero or one (optional)
+|=======================================================================
+

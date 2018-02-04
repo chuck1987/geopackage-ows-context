@@ -1,0 +1,203 @@
+[[context_extension]]
+== OWS Context Extension (Normative)
+
+=== Extension Title
+
+OWS Context
+
+=== Introduction
+
+This extension provides a mechanism for storing http://owscontext.org[OWS Context] content in a GeoPackage. This extension is based on a new SQL Select Offering extension (<<ows_context_sql_select>>) for OWS Context.
+
+=== Extension Author
+
+Jeff Yutzler
+
+=== Extension Name or Template
+
+`owscontext` (will become `gpkg_owscontext` if adopted by OGC)
+
+=== Extension Type
+
+New requirement dependent on http://www.geopackage.org/spec/#core[Clause 1].
+
+=== Applicability
+
+This extension adds an additional level of organization to existing GeoPackage data.
+
+=== Scope
+
+read-write
+
+=== Requirements Classes
+==== OWS Context Core
+===== gpkg_extensions
+====== Table Values
+[[r1]]
+[caption=""]
+.Requirement 1
+====
+A GeoPackage that complies with this extension SHALL contain rows in the `gpkg_extensions` table as described in <<gpkg_extensions_values_table>>. 
+====
+[[gpkg_extensions_values_table]]
+.GeoPackage Extensions Table Values
+[cols=",,,,",options="header",]
+|=======================================================================
+|table_name |column_name |extension_name |definition |scope
+|`gpkgext_context` |null |`ows_context` |_see below_ |`read-write`
+|`gpkgext_context_resources` |null |`ows_context` |_see below_ |`read-write`
+|`gpkgext_context_offerings` |null |`ows_context` |_see below_ |`read-write`
+|=======================================================================
+
+The values in the `definition` column SHOULD refer in some human-readable way to this extension specification.
+
+===== gpkgext_context
+====== Table Definition
+[[r2]]
+[caption=""]
+.Requirement 2
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context` table as per <<gpkgext_context_table>> and <<gpkgext_context_sql>>.
+====
+
+[[gpkgext_context_table]]
+.OWS Context Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`title` |TEXT |A human-readable title for the OWS Context document |yes | |UNIQUE
+|`abstract` |TEXT |A human-readable description of the OWS Context document purpose and/or content |yes |'' |
+|`last_change` |DATETIME |timestamp of last change to content, in ISO 8601 format|no |`strftime('%Y-%m-%dT%H:%M:%fZ', 'now')` |
+|`min_x` |DOUBLE |Bounding box minimum easting or longitude for the users of the context document |yes | |
+|`min_y` |DOUBLE |Bounding box minimum northing or latitude for the users of the context document |yes | |
+|`max_x` |DOUBLE |Bounding box maximum easting or longitude for the users of the context document |yes | |
+|`max_y` |DOUBLE |Bounding box maximum northing or latitude for the users of the context document |yes | |
+|`srs_id` |INTEGER |Spatial Reference System ID: `gpkg_spatial_ref_sys.srs_id` for the geographic extents |yes | |FK
+|`author` |TEXT |Identifier for the author of the document |yes | |
+|`publisher` |TEXT |Identifier for the publisher of the document |yes | |
+|`creator` |TEXT |The tool/application used to create the context document and its properties |yes | |
+|`rights` |TEXT |Rights which apply to the context document |yes | |
+|`keywords` |TEXT |Comma-delimited list of keywords related to this context document |yes | |
+|`metadata` |INTEGER |`id` from `gpkg_metadata` |yes | |
+|`min_time` |DATETIME |Beginning of time interval, in ISO 8601 format |yes | |
+|`max_time` |DATETIME |End of time interval, in ISO 8601 format |yes | |
+|=======================================================================
+
+[NOTE]
+====
+The rights described apply to the Context Document itself and not to any of its contents.
+The intent of the temporal and spatial extents is to indicate to a GeoPackage client the expected view of the information in area in time, not to describe the referenced resources themselves.
+====
+
+===== gpkgext_context_resources
+The `gpkgext_context_resources` table implements owc:SQLResource (<<ows_context_sql_resource>>).
+
+====== Table Definition
+[[r3]]
+[caption=""]
+.Requirement 3
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_resources` table as per <<gpkgext_context_resources_table>> and <<gpkgext_context_resources_sql>>.
+====
+
+[[gpkgext_context_resources_table]]
+.OWS Context Resources Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`context_id` |INTEGER |`id` from `gpkgext_context` |no | |FK
+|`author` |TEXT |Identifier for the author of the document |yes | |
+|`publisher` |TEXT |Identifier for the publisher of the document |yes | |
+|`rights` |TEXT |Rights which apply to the context document |yes | |
+|`min_x` |DOUBLE |Bounding box minimum easting or longitude for the users of the context document |yes | |
+|`min_y` |DOUBLE |Bounding box minimum northing or latitude for the users of the context document |yes | |
+|`max_x` |DOUBLE |Bounding box maximum easting or longitude for the users of the context document |yes | |
+|`max_y` |DOUBLE |Bounding box maximum northing or latitude for the users of the context document |yes | |
+|`srs_id` |INTEGER |Spatial Reference System ID: `gpkg_spatial_ref_sys.srs_id` for the geographic extents |yes | |FK
+|`min_time` |DATETIME |Beginning of time interval, in ISO 8601 format |yes | |
+|`max_time` |DATETIME |End of time interval, in ISO 8601 format |yes | |
+|`description` |TEXT |A reference to a description of the Context resource in alternative format |yes | |
+|`active` |BOOLEAN |This flag indicates the state of the resource within the context document. It can be interpreted by the caller as required (this may be defined in a profile or in the specific service extensions) |yes |TRUE |
+|`keywords` |TEXT |Comma-delimited list of keywords related to this context document |yes | |
+|`min_scale_denominator` |DOUBLE |Minimum scale for the display of the layer|yes | |
+|`max_scale_denominator` |DOUBLE |Maximum scale for the display of the layer|yes | |
+|`order` |INTEGER |The order of the resource |yes | |
+|=======================================================================
+
+====== Table Values
+[[r4]]
+[caption=""]
+.Requirement 4
+====
+The `context_id` column for each row in `gpkgext_context_resources` SHALL refer to the `id` from `gpkgext_context`.
+====
+
+[[r5]]
+[caption=""]
+.Requirement 5
+====
+The `contents_id` column for each row in `gpkgext_context_resources` SHALL refer to the `id` from `gpkg_contents`.
+====
+
+===== gpkgext_context_offerings
+The `gpkgext_context_offerings` table implements owc:SQLSelectOffering (<<ows_context_sql_select_offering>>).
+
+====== Table Definition
+[[r6]]
+[caption=""]
+.Requirement 6
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_offerings` table as per <<gpkgext_context_offerings_table>> and <<gpkgext_context_offerings_sql>>.
+====
+
+[[gpkgext_context_offerings_table]]
+.OWS Context Offerings Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`code`   |TEXT   |Code identifying the type of offering   |no   |   |   
+|`resource_id`   |INTEGER   |`id` from `gpkgext_context_resources` |yes   |   |   
+|`contents_id` |INTEGER |`id` from `gpkg_contents` |yes | |
+|=======================================================================
+
+===== gpkgext_context_styles
+The `gpkgext_context_styles` table implements owc:StyleSet.
+
+====== Table Definition
+[[r7]]
+[caption=""]
+.Requirement 7
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_styles` table as per <<gpkgext_context_styles_table>> and <<gpkgext_context_styles_sql>>.
+====
+
+[[gpkgext_context_styles_table]]
+.OWS Context Styles Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|TBD |TBD |TBD |TBD |TBD |TBD
+|=======================================================================
+
+==== OWS Context Features
+===== gpkgext_context_offerings
+====== Table Values
+[[r7]]
+[caption=""]
+.Requirement 7
+====
+For every row of `gpkgext_context_offerings` with a `code` of "features", the `contents_id` SHALL refer to the `id` of a row in `gpkg_contents` with a `data_type` of "features".
+====
+
+==== OWS Context Tiles
+===== gpkgext_context_offerings
+====== Table Values
+[[r8]]
+[caption=""]
+.Requirement 8
+====
+For every row of `gpkgext_context_offerings` with a `code` of "tiles", the `contents_id` SHALL refer to the `id` of a row in `gpkg_contents` with a `data_type` of "tiles".
+====
