@@ -141,7 +141,7 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_
 |`keywords` |TEXT |Comma-delimited list of keywords related to this context document |yes | |
 |`min_scale_denominator` |DOUBLE |Minimum scale for the display of the layer|yes | |
 |`max_scale_denominator` |DOUBLE |Maximum scale for the display of the layer|yes | |
-|`order` |INTEGER |The order of the resource |yes | |
+|`order` |DOUBLE |The ascending order of the resource |yes | |
 |=======================================================================
 
 ====== Table Values
