@@ -47,6 +47,9 @@ GeoPackages with rows in the `gpkg_extensions` table with an `extension_name` of
 |`gpkgext_context` |null |`ows_context` |_see below_ |`read-write`
 |`gpkgext_context_resources` |null |`ows_context` |_see below_ |`read-write`
 |`gpkgext_context_offerings` |null |`ows_context` |_see below_ |`read-write`
+|`gpkgext_context_operations` |null |`ows_context` |_see below_ |`read-write`
+|`gpkgext_context_contents` |null |`ows_context` |_see below_ |`read-write`
+|`gpkgext_context_styles` |null |`ows_context` |_see below_ |`read-write`
 |=======================================================================
 
 The values in the `definition` column SHOULD refer in some human-readable way to this extension specification.
