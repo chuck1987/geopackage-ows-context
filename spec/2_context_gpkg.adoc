@@ -7,7 +7,7 @@ OWS Context
 
 === Introduction
 
-This extension provides a mechanism for storing http://owscontext.org[OWS Context] content in a GeoPackage. This extension is based on a new SQL Select Offering extension (<<ows_context_sql_select>>) for OWS Context.
+This extension provides a mechanism for storing http://owscontext.org[OWS Context] content in a GeoPackage. This extension is based on a new SQL Content extension (<<owc_sql_content_extension>>) for OWS Context.
 
 === Extension Author
 
@@ -37,7 +37,7 @@ read-write
 [caption=""]
 .Requirement 1
 ====
-A GeoPackage that complies with this extension SHALL contain rows in the `gpkg_extensions` table as described in <<gpkg_extensions_values_table>>. 
+GeoPackages with rows in the `gpkg_extensions` table with an `extension_name` of "ows_context" SHALL comply with this extension. The `gpkg_extensions` table SHALL contain rows as described in <<gpkg_extensions_values_table>>. 
 ====
 [[gpkg_extensions_values_table]]
 .GeoPackage Extensions Table Values
@@ -79,7 +79,7 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context`
 |`creator` |TEXT |The tool/application used to create the context document and its properties |yes | |
 |`rights` |TEXT |Rights which apply to the context document |yes | |
 |`keywords` |TEXT |Comma-delimited list of keywords related to this context document |yes | |
-|`metadata` |INTEGER |`id` from `gpkg_metadata` |yes | |
+|`metadata_id` |INTEGER |`id` from `gpkg_metadata` |yes | |
 |`min_time` |DATETIME |Beginning of time interval, in ISO 8601 format |yes | |
 |`max_time` |DATETIME |End of time interval, in ISO 8601 format |yes | |
 |=======================================================================
@@ -90,13 +90,28 @@ The rights described apply to the Context Document itself and not to any of its 
 The intent of the temporal and spatial extents is to indicate to a GeoPackage client the expected view of the information in area in time, not to describe the referenced resources themselves.
 ====
 
+====== Table Values
+[[r3]]
+[caption=""]
+.Requirement 3
+====
+A GeoPackage that contains one or more non-null values in the `metadata` column of `gpkgext_context` SHALL conform to the http://www.geopackage.org/spec120/#extension_metadata[GeoPackage Metadata Extension].
+====
+
+[[r4]]
+[caption=""]
+.Requirement 4
+====
+Values of the `metadata_id` column of `gpkgext_context` SHALL correspond to the `id` column of `gpkg_metadata`.
+====
+
 ===== gpkgext_context_resources
 The `gpkgext_context_resources` table implements owc:SQLResource (<<ows_context_sql_resource>>).
 
 ====== Table Definition
-[[r3]]
+[[r5]]
 [caption=""]
-.Requirement 3
+.Requirement 5
 ====
 A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_resources` table as per <<gpkgext_context_resources_table>> and <<gpkgext_context_resources_sql>>.
 ====
@@ -127,27 +142,20 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_
 |=======================================================================
 
 ====== Table Values
-[[r4]]
+[[r6]]
 [caption=""]
-.Requirement 4
+.Requirement 6
 ====
 The `context_id` column for each row in `gpkgext_context_resources` SHALL refer to the `id` from `gpkgext_context`.
 ====
 
-[[r5]]
-[caption=""]
-.Requirement 5
-====
-The `contents_id` column for each row in `gpkgext_context_resources` SHALL refer to the `id` from `gpkg_contents`.
-====
-
 ===== gpkgext_context_offerings
-The `gpkgext_context_offerings` table implements owc:SQLSelectOffering (<<ows_context_sql_select_offering>>).
+The `gpkgext_context_offerings` table implements owc:Offering (<<owc_offering>>).
 
 ====== Table Definition
-[[r6]]
+[[r7]]
 [caption=""]
-.Requirement 6
+.Requirement 7
 ====
 A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_offerings` table as per <<gpkgext_context_offerings_table>> and <<gpkgext_context_offerings_sql>>.
 ====
@@ -158,18 +166,92 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_
 |=======================================================================
 |Column Name |Column Type |Column Description |Null |Default |Key
 |`id` |INTEGER |Autoincrement primary key |no | |PK
+|`resource_id` |INTEGER |`id` from `gpkgext_context_resources` |no | |FK
 |`code`   |TEXT   |Code identifying the type of offering   |no   |   |   
-|`resource_id`   |INTEGER   |`id` from `gpkgext_context_resources` |yes   |   |   
-|`contents_id` |INTEGER |`id` from `gpkg_contents` |yes | |
 |=======================================================================
+
+====== Table Values
+[[r8]]
+[caption=""]
+.Requirement 8
+====
+The `resource_id` column for each row in `gpkgext_context_offerings` SHALL refer to the `id` from `gpkgext_context_resources`.
+====
+
+===== gpkgext_context_operations
+The `gpkgext_context_operations` table implements owc:Operation (<<owc_operation>>).
+
+====== Table Definition
+[[r9]]
+[caption=""]
+.Requirement 9
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_operations` table as per <<gpkgext_context_operations_table>> and <<gpkgext_context_operations_sql>>.
+====
+
+[[gpkgext_context_operations_table]]
+.OWS Context Operations Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`offering_id` |INTEGER |`id` from `gpkgext_context_offerings` |no | |FK
+|`code`   |TEXT   |Code identifying the type of operation   |no   |   |   
+|`method`   |TEXT   |Name of operation method request   |no   |   |   
+|`type`   |TEXT   |MIMEType of the return result  |no   |   |   
+|`requestURL`   |TEXT   |Service Request URL   |no   |   |   
+|`request`   |TEXT   |Optional request body content   |yes   |   |   
+|`result`   |BLOB   |Result of the operation   |yes   |   |   
+|=======================================================================
+
+====== Table Values
+[[r10]]
+[caption=""]
+.Requirement 10
+====
+The `offering_id` column for each row in `gpkgext_context_operations` SHALL refer to the `id` from `gpkgext_context_offerings`.
+====
+
+===== gpkgext_context_contents
+The `gpkgext_context_contents` table implements owc:SQLContent (<<owc_sql_content>>).
+
+====== Table Definition
+[[r11]]
+[caption=""]
+.Requirement 11
+====
+A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_contents` table as per <<gpkgext_context_contents_table>> and <<gpkgext_context_contents_sql>>.
+====
+
+[[gpkgext_context_contents_table]]
+.OWS Context Contents Table Definition
+[cols=",,,,,",options="header",]
+|=======================================================================
+|Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`operation_id` |INTEGER |`id` from `gpkgext_context_operations` |no | |FK
+|`result`   |TEXT   |The result expression list, i.e., everything between SELECT and FROM   |no   |   |   
+|`from`   |TEXT   |A single table or view name   |no   |   |   
+|`where`   |TEXT   |The actual WHERE clause   |yes   |   |   
+|`order_by`   |TEXT   |The actual ORDER BY clause   |yes   |   |   
+|`group_by`   |TEXT   |The actual GROUP BY clause   |yes   |   |   
+|=======================================================================
+
+====== Table Values
+[[r12]]
+[caption=""]
+.Requirement 12
+====
+The `operation_id` column for each row in `gpkgext_context_contents` SHALL refer to the `id` from `gpkgext_context_operations`.
+====
 
 ===== gpkgext_context_styles
 The `gpkgext_context_styles` table implements owc:StyleSet.
 
 ====== Table Definition
-[[r7]]
+[[r13]]
 [caption=""]
-.Requirement 7
+.Requirement 13
 ====
 A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_styles` table as per <<gpkgext_context_styles_table>> and <<gpkgext_context_styles_sql>>.
 ====
@@ -179,25 +261,64 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_
 [cols=",,,,,",options="header",]
 |=======================================================================
 |Column Name |Column Type |Column Description |Null |Default |Key
+|`id` |INTEGER |Autoincrement primary key |no | |PK
+|`offering_id` |INTEGER |`id` from `gpkgext_context_offerings` |no | |FK
 |TBD |TBD |TBD |TBD |TBD |TBD
 |=======================================================================
 
+====== Table Values
+[[r14]]
+[caption=""]
+.Requirement 14
+====
+The `offering_id` column for each row in `gpkgext_context_styles` SHALL refer to the `id` from `gpkgext_context_offerings`.
+====
+
+[[owc_sql_select_operation]]
+==== OWS Context SQL Select Operation
+This requirements class is a dependency for storing GeoPackage content inside a OWS Context inside a GeoPackage.
+
+===== gpkgext_context_operations
+====== Table Values
+[[r15]]
+[caption=""]
+.Requirement 15
+====
+For every row of `gpkgext_context_offerings` with a `code` of "SQL", rows of the `gpkgext_context_operations` table with corresponding `offering_id` values SHALL have column values as per <<gpkgext_context_operations_values_table>>.
+====
+
+[[gpkgext_context_operations_values_table]]
+.OWS Context SQL Operations Values
+[cols=",",options="header",]
+|=======================================================================
+|Column Name |Column Value
+|`code` |`SELECT`
+|`method` |`SQL`
+|`type` |`SQL`
+|`request`   |null
+|`result`   |null
+|=======================================================================
+
 ==== OWS Context Features
+This requirements class allows GeoPackage features data to be referenced inside an OWS Context inside a GeoPackage. It depends on requirements class OWS Context SQL Select Operation (<<owc_sql_select_operation>>).
+
 ===== gpkgext_context_offerings
 ====== Table Values
-[[r7]]
+[[r16]]
 [caption=""]
-.Requirement 7
+.Requirement 16
 ====
 For every row of `gpkgext_context_offerings` with a `code` of "features", the `contents_id` SHALL refer to the `id` of a row in `gpkg_contents` with a `data_type` of "features".
 ====
 
 ==== OWS Context Tiles
+This requirements class allows GeoPackage tiles data to be referenced inside an OWS Context inside a GeoPackage. It depends on requirements class OWS Context SQL Select Operation (<<owc_sql_select_operation>>).
+
 ===== gpkgext_context_offerings
 ====== Table Values
-[[r8]]
+[[r17]]
 [caption=""]
-.Requirement 8
+.Requirement 17
 ====
 For every row of `gpkgext_context_offerings` with a `code` of "tiles", the `contents_id` SHALL refer to the `id` of a row in `gpkg_contents` with a `data_type` of "tiles".
 ====

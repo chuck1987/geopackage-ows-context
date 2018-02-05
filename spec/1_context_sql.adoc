@@ -1,6 +1,6 @@
 == OWS Context SQL Extensions
 
-[[ows_context_sql_resource]]
+[[owc_sql_resource_extension]]
 === SQL Resource Extension
 Since relational databases have no mechanical way to control ordering, this extension provides an new datatype that contains an element that can be implemented as a column to support ordering.
 
@@ -22,9 +22,11 @@ This datatype extends _owc:Resource_ with the element(s) listed in <<sql_select_
 |`order`|The ascending order of configured resources| DOUBLE| Zero or one (optional)
 |=======================================================================
 
+[[owc_sql_content_extension]]
 === SQL Content Extension
 This extension is used when a Context document refers to content within a relational (SQL) database. 
 
+[[owc_offering]]
 ==== Datatype owc:Offering
 [[owcr2]]
 [caption=""]
@@ -48,6 +50,7 @@ The changes are [underline]#underlined#.
 |`content`  |N/A  |N/A   | [underline]#Zero (prohibited)#
 |=======================================================================
 
+[[owc_operation]]
 ==== Datatype owc:Operation
 [[owcr3]]
 [caption=""]
@@ -66,7 +69,7 @@ The changes are [underline]#underlined#.
 [cols=",,,",options="header",]
 |=======================================================================
 |Name |Definition | Data Type and Values |Multiplicity and Use
-|`code`        |Operation name (e.g., `SELECT`)| CharacterString| One (mandatory) 
+|`code`        |[underline]#`SELECT`#| CharacterString| [underline]#One (mandated)# 
 |`method`      |[underline]#`SQL`#| CharacterString| [underline]#One (mandated)# 
 |`type`        |[underline]#`SQL`#   | CharacterString | [underline]#One (mandated)#
 |`requestURL`  |Service Request URL   | URI  | One (mandatory) 
