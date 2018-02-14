@@ -56,7 +56,7 @@ The changes are [underline]#underlined#.
 [caption=""]
 .Requirement 3
 ====
-When the `code` of an _owc:Offering_ is `SQL`, _owc:Operation_ child elements SHALL be constrained as per <<sql_operation_table>>.
+When the `code` of an _owc:Offering_ is `SELECT`, _owc:Operation_ child elements SHALL be constrained as per <<sql_operation_table>>.
 ====
 
 [NOTE]
@@ -89,7 +89,7 @@ If the referenced content is within the database containing the Context, the `re
 [caption=""]
 .Requirement 4
 ====
-The Context Document SHALL use an _owc:SQLContent_ datatype as per <<sql_content_table>> as the `content` element in _owc:Content_ when the `method` of the parent _owc:Operation_ is `SQL`.
+The Context Document SHALL use an _owc:SQLContent_ datatype as per <<sql_content_table>> as the `content` element in _owc:Content_ when the `code` of the parent _owc:Operation_ is `SELECT`.
 ====
 
 [[sql_content_table]]
