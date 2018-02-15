@@ -1,10 +1,13 @@
 == OWS Context SQL Extensions
+This section describes extensions to OWS Context to support SQL databases.
 
 [[owc_sql_resource_extension]]
 === SQL Resource Extension
-Since relational databases have no mechanical way to control ordering, this extension provides an new datatype that contains an element that can be implemented as a column to support ordering.
+This extension applies when a Context document is completely stored within a relational (SQL) database.
 
 ==== Datatype owc:SQLResource
+Since relational databases have no mechanical way to control ordering, this extension provides an new datatype that contains an element that can be implemented as a column to support ordering.
+
 [[owcr1]]
 [caption=""]
 .Requirement 1
@@ -24,7 +27,7 @@ This datatype extends _owc:Resource_ with the element(s) listed in <<sql_select_
 
 [[owc_sql_content_extension]]
 === SQL Content Extension
-This extension is used when a Context document refers to content within a relational (SQL) database. 
+This extension applies when a Context document refers to content within a relational (SQL) database. 
 
 [[owc_offering]]
 ==== Datatype owc:Offering
@@ -32,7 +35,14 @@ This extension is used when a Context document refers to content within a relati
 [caption=""]
 .Requirement 2
 ====
-When the `code` of an _owc:Offering_ is `SQL`, _owc:Offering_ SHALL constrained as per <<sql_offering_table>>.
+The `code` of an _owc:Offering_ element SHALL be used to determine whether the SQL Content Extension is in use for that offering.
+====
+
+[[owcr3]]
+[caption=""]
+.Requirement 3
+====
+When the SQL Content Extension is in use, an _owc:Offering_ SHALL be constrained as per <<sql_offering_table>>.
 ====
 
 [NOTE]
@@ -45,18 +55,18 @@ The changes are [underline]#underlined#.
 [cols=",,,",options="header",]
 |=======================================================================
 |Name |Definition | Data Type and Values |Multiplicity and Use
-|`code`|[underline]#`SQL`#| CharacterString| [underline]#One (mandated)# 
+|`code`|_as per extension_| CharacterString| [underline]#One (mandated)# 
 |`operation` |Operations used to invoke the service   | owc:Operation | [underline]#One (mandatory)#
 |`content`  |N/A  |N/A   | [underline]#Zero (prohibited)#
 |=======================================================================
 
 [[owc_operation]]
 ==== Datatype owc:Operation
-[[owcr3]]
+[[owcr4]]
 [caption=""]
-.Requirement 3
+.Requirement 4
 ====
-When the `code` of an _owc:Offering_ is `SELECT`, _owc:Operation_ child elements SHALL be constrained as per <<sql_operation_table>>.
+When the SQL Content Extension is in use for an offering, _owc:Operation_ child elements of that offering SHALL be constrained as per <<sql_operation_table>>.
 ====
 
 [NOTE]
@@ -85,11 +95,11 @@ If the referenced content is within the database containing the Context, the `re
  
 [[owc_sql_content]]
 ==== Datatype owc:SQLContent
-[[owcr4]]
+[[owcr5]]
 [caption=""]
-.Requirement 4
+.Requirement 5
 ====
-The Context Document SHALL use an _owc:SQLContent_ datatype as per <<sql_content_table>> as the `content` element in _owc:Content_ when the `code` of the parent _owc:Operation_ is `SELECT`.
+When the SQL Content Extension is in use for an operation, the Context Document SHALL use an _owc:SQLContent_ datatype as per <<sql_content_table>> as the `content` element in _owc:Content_.
 ====
 
 [[sql_content_table]]
@@ -109,3 +119,24 @@ The Context Document SHALL use an _owc:SQLContent_ datatype as per <<sql_content
 ====
 If joins are needed, they should be established as views beforehand so that the `from` element can be a single value.
 ====
+
+=== GeoPackage Extension
+This class describes the extension to the OWS Context Core which supports content stored in a GeoPackage; this can include referencing itself (i.e., when the context and the content are in the same GeoPackage), or local databases.
+
+[[owcr6]]
+[caption=""]
+.Requirement 6 - http://www.opengis.net/spec/owc/1.0/req/gpkg/code
+====
+When the `code` of an owc:Offering is one of the codes listed in <<gpkg_content_types>>, the SQL Content Extension SHALL be used for that offering and the content type SHALL be as per the dependency.
+====
+
+[[gpkg_content_types]]
+.GeoPackage Content Types
+[cols=",",options="header",]
+|=======================================================================
+|Code |Dependency 
+|`features`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/features
+|`tiles`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/tiles
+|`attributes`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/attributes
+|=======================================================================
+
