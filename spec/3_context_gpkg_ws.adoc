@@ -1,3 +1,51 @@
+[[owc_sql_select_operation]]
+==== OWS Context SQL Select Operation
+This requirements class is a dependency for storing GeoPackage content inside a OWS Context inside a GeoPackage.
+
+===== gpkgext_context_operations
+====== Table Values
+[[r15]]
+[caption=""]
+.Requirement 15
+====
+For every row of `gpkgext_context_offerings` with a `code` that indicates that the SQL Content Extension for OWS Context (<<owc_sql_content_extension>>) is in effect, rows of the `gpkgext_context_operations` table with corresponding `offering_id` values SHALL have column values as per <<gpkgext_context_operations_values_table>>.
+====
+
+[[gpkgext_context_operations_values_table]]
+.OWS Context SQL Operations Values
+[cols=",",options="header",]
+|=======================================================================
+|Column Name |Column Value
+|`code` |`SELECT`
+|`method` |`SQL`
+|`type` |`SQL`
+|`request`   |null
+|`result`   |null
+|=======================================================================
+
+==== OWS Context GeoPackage Content
+This requirements class allows an OWS Context inside a GeoPackage to reference other GeoPackage content. It depends on requirements class OWS Context SQL Select Operation (<<owc_sql_select_operation>>).
+
+===== gpkgext_context_operations
+====== Table Values
+When an operation refers to a GeoPackage, the `from` of the child contents must match a `table_name` in the referenced GeoPackage.
+
+[[r16]]
+[caption=""]
+.Requirement 16
+====
+For every row of `gpkgext_context_operations` with a `requestURL` that refers to a GeoPackage, child rows of `gpkgext_context_contents` with a corresponding `operation_id` SHALL have a corresponding row in `gpkg_contents` of that GeoPackage with a `table_name` value matching the `from` value.
+====
+
+When an operation refers to a GeoPackage, the `code` of the parent offering must match the `data_type` of the corresponding table in the referenced GeoPackage.
+
+[[r17]]
+[caption=""]
+.Requirement 17
+====
+Rows of `gpkg_contents` identified in Requirement 16 SHALL have a `data_type` that matches the `code` of the row of `gpkgext_context_offerings` with an `id` corresponding to the `offering_id` of the corresponding row of `gpkgext_context_operations`.
+====
+
 ==== OWS Context Web Services
 It is possible to encode OGC Web Services in a GeoPackage-based OWS Context. The service type is determined by the `code` of `gpkgext_context_offerings`. The OWS Context Encoding Standard currently supports `WMS`, `WFS`, `WCS`, `WPS`, `CSW`, and `WMTS`. It is the responsibility of the GeoPackage producer to ensure that the recipient is able to handle the stored content appropriately. 
 
