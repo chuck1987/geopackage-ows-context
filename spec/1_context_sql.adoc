@@ -125,7 +125,7 @@ This class describes the extension to the OWS Context Core which supports conten
 
 [[owcr6]]
 [caption=""]
-.Requirement 6 - http://www.opengis.net/spec/owc/1.0/req/gpkg/code
+.Requirement 6
 ====
 When the `code` of an owc:Offering is one of the codes listed in <<gpkg_content_types>>, the SQL Content Extension SHALL be used for that offering and the content type SHALL be as per the dependency.
 ====
@@ -134,9 +134,14 @@ When the `code` of an owc:Offering is one of the codes listed in <<gpkg_content_
 .GeoPackage Content Types
 [cols=",",options="header",]
 |=======================================================================
-|Code |Dependency 
-|`features`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/features
-|`tiles`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/tiles
-|`attributes`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/attributes
+|Code |Dependency
+|`features`      |http://www.geopackage.org/spec120/#_features[http://www.opengis.net/doc/IS/geopackage/1.2/opt/features]
+|`tiles`      |http://www.geopackage.org/spec120/#_tiles[http://www.opengis.net/doc/IS/geopackage/1.2/opt/tiles] 
+|`attributes`      |http://www.geopackage.org/spec120/#_attributes[http://www.opengis.net/doc/IS/geopackage/1.2/opt/attributes]
+|`2d-gridded-coverage`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/2d-gridded-coverage
 |=======================================================================
 
+[NOTE]
+====
+The row for `2d-gridded-coverage` will be updated with a proper hyperlink once the adopted standard is published.
+====
