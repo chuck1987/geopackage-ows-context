@@ -1,5 +1,114 @@
 === Table Definition SQL
-TBD
+==== gpkgext_context
+
+[[gpkgext_context_sql]]
+.gpkgext_context Table Definition SQL
+[cols=",",style="asciidoc"]
+[source,sql]
+----
+CREATE TABLE `gpkgext_context` (
+	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`title`	TEXT NOT NULL,
+	`abstract`	TEXT DEFAULT '',
+	`last_change`	DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+	`min_x`	DOUBLE,
+	`min_y`	DOUBLE,
+	`max_x`	DOUBLE,
+	`max_y`	DOUBLE,
+	`srs_id`	INTEGER,
+	`author`	TEXT,
+	`publisher`	TEXT,
+	`creator`	TEXT,
+	`rights`	TEXT,
+	`keywords`	TEXT,
+	`metadata_id`	NUMBER,
+	`min_time`	DATETIME,
+	`max_time`	DATETIME,
+  CONSTRAINT fk_ge_c_srs_id FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys (srs_id)
+);
+----
+
+==== gpkgext_context_resources
+[[gpkgext_context_resources_sql]]
+.gpkgext_context_resources Table Definition SQL
+[cols=",",style="asciidoc"]
+[source,sql]
+----
+CREATE TABLE `gpkgext_context_resources` (
+	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`context_id` INTEGER NOT NULL,
+	`author`	TEXT,
+	`publisher`	TEXT,
+	`rights`	TEXT,
+	`min_x`	DOUBLE,
+	`min_y`	DOUBLE,
+	`max_x`	DOUBLE,
+	`max_y`	DOUBLE,
+	`srs_id`	INTEGER,
+	`min_time`	DATETIME,
+	`max_time`	DATETIME,
+	`description`	TEXT,
+	`active` BOOLEAN DEFAULT TRUE,
+	`keywords`	TEXT,
+	`min_scale_denominator`	DOUBLE,
+	`max_scale_denominator`	DOUBLE,
+	`order`	DOUBLE,
+	CONSTRAINT fk_ge_c_r_context_id FOREIGN KEY (context_id) REFERENCES gpkgext_context(id),
+	CONSTRAINT fk_ge_c_r_srs_id FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys (srs_id)
+ );
+----
+
+==== gpkgext_context_offerings
+[[gpkgext_context_offerings_sql]]
+.gpkgext_context_offerings Table Definition SQL
+[cols=",",style="asciidoc"]
+[source,sql]
+----
+CREATE TABLE `gpkgext_context_offerings` (
+	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`resource_id` INTEGER NOT NULL,
+	`code`	TEXT NOT NULL,
+	CONSTRAINT fk_ge_c_o_resource_id FOREIGN KEY (resource_id) REFERENCES gpkgext_context_resources(id)
+ );
+----
+
+==== gpkgext_context_operations
+[[gpkgext_context_operations_sql]]
+.gpkgext_context_operations Table Definition SQL
+[cols=",",style="asciidoc"]
+[source,sql]
+----
+CREATE TABLE `gpkgext_context_operations` (
+	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`offering_id` INTEGER NOT NULL,
+	`code`	TEXT NOT NULL,
+	`method`	TEXT NOT NULL,
+	`type`	TEXT NOT NULL,
+	`requestURL`	TEXT NOT NULL,
+	`request`	TEXT,
+	`result`	BLOB,
+	CONSTRAINT fk_ge_c_o_offering_id FOREIGN KEY (offering_id) REFERENCES gpkgext_context_offerings(id)
+ );
+----
+
+==== gpkgext_context_contents
+[[gpkgext_context_contents_sql]]
+.gpkgext_context_contents Table Definition SQL
+[cols=",",style="asciidoc"]
+[source,sql]
+----
+CREATE TABLE `gpkgext_context_contents` (
+	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`operation_id` INTEGER NOT NULL,
+	`result`	TEXT NOT NULL,
+	`from`	TEXT NOT NULL,
+	`where`	TEXT,
+	`order_by`	TEXT,
+	`group_by`	TEXT,
+	CONSTRAINT fk_ge_c_c_operation_id FOREIGN KEY (operation_id) REFERENCES gpkgext_context_operations(id)
+ );
+----
+
 
 === Abstract Test Suite (Normative)
 TBD
