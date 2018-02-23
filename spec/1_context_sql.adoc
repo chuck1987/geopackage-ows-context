@@ -25,6 +25,11 @@ This datatype extends _owc:Resource_ with the element(s) listed in <<sql_select_
 |`order`|The ascending order of configured resources| DOUBLE| Zero or one (optional)
 |=======================================================================
 
+[NOTE]
+====
+This element is a double because the conventional way to set the order of an element in the middle of an ordered list is to set its order to a value midway between the preceding and following list elements.
+====
+
 [[owc_sql_content_extension]]
 === SQL Content Extension
 This extension applies when a Context document refers to content within a relational (SQL) database. 
@@ -55,10 +60,15 @@ The changes are [underline]#underlined#.
 [cols=",,,",options="header",]
 |=======================================================================
 |Name |Definition | Data Type and Values |Multiplicity and Use
-|`code`|_as per extension_| CharacterString| [underline]#One (mandated)# 
+|`code`|Offering Code| CharacterString| [underline]#One (mandated)# 
 |`operation` |Operations used to invoke the service   | owc:Operation | [underline]#One (mandatory)#
 |`content`  |N/A  |N/A   | [underline]#Zero (prohibited)#
 |=======================================================================
+
+[NOTE]
+====
+The offering code for GeoPackage is `GPKG`.
+====
 
 [[owc_operation]]
 ==== Datatype owc:Operation
@@ -79,9 +89,9 @@ The changes are [underline]#underlined#.
 [cols=",,,",options="header",]
 |=======================================================================
 |Name |Definition | Data Type and Values |Multiplicity and Use
-|`code`        |[underline]#`SELECT`#| CharacterString| [underline]#One (mandated)# 
-|`method`      |[underline]#`SQL`#| CharacterString| [underline]#One (mandated)# 
-|`type`        |[underline]#`SQL`#   | CharacterString | [underline]#One (mandated)#
+|`code`        |_as per extension_| CharacterString| [underline]#One (mandated)# 
+|`method`      |[underline]#`SELECT`#| CharacterString| [underline]#One (mandated)# 
+|`type`        |[underline]#`SQL Record Set`#   | CharacterString | [underline]#One (mandated)#
 |`requestURL`  |Service Request URL   | URI  | One (mandatory) 
 |`request`     |Request body content   |[underline]#owc:SQLContent# (<<owc_sql_content>>)  | [underline]#One (mandatory)#
 |`result`      |N/A   |N/A   | [underline]#Zero (prohibited)#
@@ -90,6 +100,7 @@ The changes are [underline]#underlined#.
 
 [NOTE]
 ====
+The `code` for GeoPackage is `GPKG`.
 If the referenced content is within the database containing the Context, the `requestURL` should be `.`. Otherwise the `requestURL` should be a connect string.
 ====
  
