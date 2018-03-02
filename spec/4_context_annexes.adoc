@@ -100,11 +100,8 @@ CREATE TABLE `gpkgext_context_operations` (
 CREATE TABLE `gpkgext_context_contents` (
 	`id`	INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`operation_id` INTEGER NOT NULL,
-	`result`	TEXT NOT NULL,
 	`from`	TEXT NOT NULL,
-	`where`	TEXT,
-	`order_by`	TEXT,
-	`group_by`	TEXT,
+	`sql`	TEXT,
 	CONSTRAINT fk_ge_c_c_operation_id FOREIGN KEY (operation_id) REFERENCES gpkgext_context_operations(id)
  );
 ----

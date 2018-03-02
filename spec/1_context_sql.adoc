@@ -118,17 +118,19 @@ When the SQL Content Extension is in use for an operation, the Context Document 
 [cols=",,,",options="header",]
 |=======================================================================
 |Name |Definition | Data Type and Values |Multiplicity and Use
-|`result`      |the result expression list, i.e., everything between SELECT and FROM|CharacterString | One (mandatory)
 |`from`        |a single table or view name|CharacterString | One (mandatory)
-|`where`       |the actual WHERE clause|CharacterString | Zero or one (optional)
-|`order_by`    |the actual `ORDER BY` clause|CharacterString | Zero or one (optional)
-|`group_by`    |the actual `GROUP BY` clause|CharacterString | Zero or one (optional)
+|`query`       |the actual SQL query|CharacterString | One (mandatory)
 |`extension`   |Application specific content|N/A | Zero or more (optional)
 |=======================================================================
 
 [NOTE]
 ====
 If joins are needed, they should be established as views beforehand so that the `from` element can be a single value.
+====
+
+[WARNING]
+====
+It is the responsibility of the OWS Context client to verify that the `query` provided is safe to execute on that database. OWS Context clients may wish to construct their own queries based on the `from` value and the schema of that table.
 ====
 
 === GeoPackage Extension
