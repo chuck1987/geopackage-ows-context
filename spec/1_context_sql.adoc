@@ -65,11 +65,6 @@ The changes are [underline]#underlined#.
 |`content`  |N/A  |N/A   | [underline]#Zero (prohibited)#
 |=======================================================================
 
-[NOTE]
-====
-The offering code for GeoPackage is `GPKG`.
-====
-
 [[owc_operation]]
 ==== Datatype owc:Operation
 [[owcr4]]
