@@ -146,10 +146,6 @@ When the `code` of an owc:Offering is one of the codes listed in <<gpkg_content_
 |`features`      |http://www.geopackage.org/spec120/#_features[http://www.opengis.net/doc/IS/geopackage/1.2/opt/features]
 |`tiles`      |http://www.geopackage.org/spec120/#_tiles[http://www.opengis.net/doc/IS/geopackage/1.2/opt/tiles] 
 |`attributes`      |http://www.geopackage.org/spec120/#_attributes[http://www.opengis.net/doc/IS/geopackage/1.2/opt/attributes]
-|`2d-gridded-coverage`      |http://www.opengis.net/doc/IS/geopackage/1.2/opt/2d-gridded-coverage
+|`2d-gridded-coverage`      |http://docs.opengeospatial.org/is/17-066r1/17-066r1.html
 |=======================================================================
 
-[NOTE]
-====
-The row for `2d-gridded-coverage` will be updated with a proper hyperlink once the adopted standard is published.
-====
