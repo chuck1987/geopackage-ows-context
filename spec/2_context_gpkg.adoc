@@ -129,10 +129,10 @@ A GeoPackage that complies with this extension SHALL contain a `gpkgext_context_
 |`author` |TEXT |Identifier for the author of the document |yes | |
 |`publisher` |TEXT |Identifier for the publisher of the document |yes | |
 |`rights` |TEXT |Rights which apply to the context document |yes | |
-|`min_x` |DOUBLE |Bounding box minimum easting or longitude for the users of the context document |yes | |
-|`min_y` |DOUBLE |Bounding box minimum northing or latitude for the users of the context document |yes | |
-|`max_x` |DOUBLE |Bounding box maximum easting or longitude for the users of the context document |yes | |
-|`max_y` |DOUBLE |Bounding box maximum northing or latitude for the users of the context document |yes | |
+|`min_x` |DOUBLE |Bounding box minimum easting or longitude of the resource |yes | |
+|`min_y` |DOUBLE |Bounding box minimum northing or latitude of the resource |yes | |
+|`max_x` |DOUBLE |Bounding box maximum easting or longitude of the resource |yes | |
+|`max_y` |DOUBLE |Bounding box maximum northing or latitude of the resource |yes | |
 |`srs_id` |INTEGER |Spatial Reference System ID: `gpkg_spatial_ref_sys.srs_id` for the geographic extents |yes | |FK
 |`min_time` |DATETIME |Beginning of time interval, in ISO 8601 format |yes | |
 |`max_time` |DATETIME |End of time interval, in ISO 8601 format |yes | |
